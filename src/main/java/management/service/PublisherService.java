@@ -1,8 +1,11 @@
 package management.service;
 
+import management.model.Book;
 import management.model.Publisher;
 import management.repo.PublisherRepo;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class PublisherService {
@@ -25,4 +28,7 @@ public class PublisherService {
         return publisherRepo.findById(publisherId).orElse(null);
     }
 
+    public List<Publisher> findAll() {
+        return publisherRepo.findAll();
+    }
 }

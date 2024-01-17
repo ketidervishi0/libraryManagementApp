@@ -41,11 +41,11 @@ public class AuthorController {
         }
     }
 
-    @GetMapping("/getById/{authorId}")
-    public ResponseEntity<Object> getAuthorById(@PathVariable @NotNull Long authorId) {
+    @GetMapping("/getById/{id}")
+    public ResponseEntity<Object> getAuthorById(@PathVariable @NotNull Long id) {
 
         try {
-            Author author = authorService.get(authorId);
+            Author author = authorService.get(id);
             if (author == null) {
                 return RestResponseMapper.map(SUCCESS, HttpStatus.NOT_FOUND, null, RECORDS_RECEIVED);
             }
@@ -66,30 +66,30 @@ public class AuthorController {
         }
     }
 
-    @PutMapping("/updateById/{authorId}")
-    public ResponseEntity<Object> updateAuthorById(@PathVariable @NotNull Long authorId, @Valid @RequestBody AuthorRequest authorRequest) {
+    @PutMapping("/updateById/{id}")
+    public ResponseEntity<Object> updateAuthorById(@PathVariable @NotNull Long id, @Valid @RequestBody AuthorRequest authorRequest) {
         try {
-            Author author = this.authorService.get(authorId);
+            Author author = this.authorService.get(id);
             if (author == null) {
                 return RestResponseMapper.map(SUCCESS, HttpStatus.NOT_FOUND, null, NOT_FOUND);
             }
 
             author = modelMapper.map(authorRequest, Author.class);
-            author = authorService.update(author, authorId);
+            author = authorService.update(author, id);
             return RestResponseMapper.map(SUCCESS, HttpStatus.OK, author, RECORD_UPDATED);
         } catch (Exception e) {
             return RestResponseMapper.map(FAIL, HttpStatus.INTERNAL_SERVER_ERROR, null, SERVER_ERROR);
         }
     }
 
-    @DeleteMapping("/deleteById/{authorId}")
-    public ResponseEntity<Object> deleteAuthorById(@PathVariable @NotNull Long authorId) {
+    @DeleteMapping("/deleteById/{id}")
+    public ResponseEntity<Object> deleteAuthorById(@PathVariable @NotNull Long id) {
         try {
-            Author author = authorService.get(authorId);
+            Author author = authorService.get(id);
             if (author == null) {
                 return RestResponseMapper.map(SUCCESS, HttpStatus.NOT_FOUND, null, NOT_FOUND);
             }
-            authorService.delete(authorId);
+            authorService.delete(id);
             return RestResponseMapper.map(SUCCESS, HttpStatus.OK, null, RECORD_DELETED);
         } catch (Exception e) {
             return RestResponseMapper.map(FAIL, HttpStatus.INTERNAL_SERVER_ERROR, null, SERVER_ERROR);
