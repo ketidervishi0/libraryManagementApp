@@ -45,9 +45,9 @@ public class ReviewController {
     }
 
     @GetMapping("/getById/{id}")
-    public ResponseEntity<Object> getReviewById(@PathVariable @NotNull Long reviewId) {
+    public ResponseEntity<Object> getReviewById(@PathVariable @NotNull Long id) {
         try {
-            Review review = reviewService.getReviewById(reviewId);
+            Review review = reviewService.getReviewById(id);
             if (review == null) {
                 return RestResponseMapper.map(SUCCESS, HttpStatus.NOT_FOUND, null, RECORDS_RECEIVED);
             }
@@ -74,25 +74,10 @@ public class ReviewController {
         }
     }
 
-    @DeleteMapping("/deleteById/{reviewId}")
-    public ResponseEntity<Object> deleteReviewById(@PathVariable @NotNull Long reviewId) {
+    @PutMapping("/updateById/{id}")
+    public ResponseEntity<Object> updateReviewById(@PathVariable @NotNull Long id, @Valid @RequestBody ReviewRequest reviewRequest) {
         try {
-            Review review = reviewService.getReview(reviewId);
-            if (review == null) {
-                return RestResponseMapper.map(SUCCESS, HttpStatus.NOT_FOUND, null, NOT_FOUND);
-            }
-            reviewService.delete(reviewId);
-            return RestResponseMapper.map(SUCCESS, HttpStatus.OK, null, RECORD_DELETED);
-        } catch (Exception e) {
-            return RestResponseMapper.map(FAIL, HttpStatus.INTERNAL_SERVER_ERROR, null, SERVER_ERROR);
-
-        }
-    }
-
-    @PutMapping("/updateById/{reviewId}")
-    public ResponseEntity<Object> updateReviewById(@PathVariable @NotNull Long reviewId, @Valid @RequestBody ReviewRequest reviewRequest) {
-        try {
-            Review review = reviewService.getReview(reviewId);
+            Review review = reviewService.getReview(id);
             if (review == null) {
                 return RestResponseMapper.map(SUCCESS, HttpStatus.NOT_FOUND, null, NOT_FOUND);
             }
@@ -102,11 +87,27 @@ public class ReviewController {
                 return RestResponseMapper.map(FAIL, HttpStatus.NOT_FOUND, null, RECORDS_RECEIVED);
             }
             review.setAuthor(author);
-            review = reviewService.update(review, reviewId);
+            review = reviewService.update(review, id);
 
             return RestResponseMapper.map(SUCCESS, HttpStatus.OK, review, RECORD_UPDATED);
         } catch (Exception e) {
             return RestResponseMapper.map(FAIL, HttpStatus.INTERNAL_SERVER_ERROR, null, SERVER_ERROR);
         }
     }
+
+    @DeleteMapping("/deleteById/{id}")
+    public ResponseEntity<Object> deleteReviewById(@PathVariable @NotNull Long id) {
+        try {
+            Review review = reviewService.getReview(id);
+            if (review == null) {
+                return RestResponseMapper.map(SUCCESS, HttpStatus.NOT_FOUND, null, NOT_FOUND);
+            }
+            reviewService.delete(id);
+            return RestResponseMapper.map(SUCCESS, HttpStatus.OK, null, RECORD_DELETED);
+        } catch (Exception e) {
+            return RestResponseMapper.map(FAIL, HttpStatus.INTERNAL_SERVER_ERROR, null, SERVER_ERROR);
+
+        }
+    }
+
 }

@@ -1,6 +1,7 @@
 package management.controller;
 
 import management.mappers.RestResponseMapper;
+import management.model.Book;
 import management.model.Publisher;
 import management.request.PublisherRequest;
 import management.service.PublisherService;
@@ -10,6 +11,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static management.constants.Messages.*;
 import static management.constants.Messages.SERVER_ERROR;
@@ -27,6 +30,33 @@ public class PublisherController {
         this.modelMapper = modelMapper;
     }
 
+    @GetMapping("/getAll")
+    public ResponseEntity<Object> getAllPublisherss() {
+        try {
+            List<Publisher> publisherList = this.publisherService.findAll();
+            if (publisherList.isEmpty()) {
+                return RestResponseMapper.map(SUCCESS, HttpStatus.NOT_FOUND, null, RECORDS_RECEIVED);
+            }
+            return RestResponseMapper.map(SUCCESS, HttpStatus.OK, publisherList, RECORDS_RECEIVED);
+        } catch (Exception ex) {
+            return RestResponseMapper.map(FAIL, HttpStatus.INTERNAL_SERVER_ERROR, null, SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/getById/{id}")
+    public ResponseEntity<Object> getPublisherById(@PathVariable @NotNull Long id) {
+
+        try {
+            Publisher publisher = publisherService.get(id);
+            if (publisher == null) {
+                return RestResponseMapper.map(SUCCESS, HttpStatus.NOT_FOUND, null, RECORDS_RECEIVED);
+            }
+            return RestResponseMapper.map(SUCCESS, HttpStatus.OK, publisher, RECORDS_RECEIVED);
+        } catch (Exception ex) {
+            return RestResponseMapper.map(FAIL, HttpStatus.INTERNAL_SERVER_ERROR, null, RECORDS_RECEIVED);
+        }
+    }
+
     @PostMapping("/add")
     public ResponseEntity<Object> addPublisher(@RequestBody @Valid PublisherRequest publisherRequest) {
         try {
@@ -38,28 +68,14 @@ public class PublisherController {
         }
     }
 
-    @GetMapping("/getById/{publisherId}")
-    public ResponseEntity<Object> getPublisherById(@PathVariable @NotNull Long publisherId) {
-
+    @DeleteMapping("/deleteById/{id}")
+    public ResponseEntity<Object> deletePublisherById(@PathVariable @NotNull Long id) {
         try {
-            Publisher publisher = publisherService.get(publisherId);
-            if (publisher == null) {
-                return RestResponseMapper.map(SUCCESS, HttpStatus.NOT_FOUND, null, RECORDS_RECEIVED);
-            }
-            return RestResponseMapper.map(SUCCESS, HttpStatus.OK, publisher, RECORDS_RECEIVED);
-        } catch (Exception ex) {
-            return RestResponseMapper.map(FAIL, HttpStatus.INTERNAL_SERVER_ERROR, null, RECORDS_RECEIVED);
-        }
-    }
-
-    @DeleteMapping("/deleteById/{publisherId}")
-    public ResponseEntity<Object> deletePublisherById(@PathVariable @NotNull Long publisherId) {
-        try {
-            Publisher publisher = publisherService.get(publisherId);
+            Publisher publisher = publisherService.get(id);
             if (publisher == null) {
                 return RestResponseMapper.map(SUCCESS, HttpStatus.NOT_FOUND, null, NOT_FOUND);
             }
-            publisherService.deletePublisher(publisherId);
+            publisherService.deletePublisher(id);
             return RestResponseMapper.map(SUCCESS, HttpStatus.OK, null, RECORD_DELETED);
         } catch (
                 Exception e) {
