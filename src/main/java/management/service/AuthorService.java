@@ -10,7 +10,6 @@ import java.util.List;
 public class AuthorService {
 
     private final AuthorRepo authorRepo;
-    private Long authorId;
 
     public AuthorService(AuthorRepo authorRepo) {
         this.authorRepo = authorRepo;
@@ -20,24 +19,24 @@ public class AuthorService {
         return authorRepo.findAll();
     }
 
-    public Author findById(Long authorId) {
-        return authorRepo.findById(authorId).orElse(null);
+    public Author findById(Long id) {
+        return authorRepo.findById(id).orElse(null);
     }
 
-    public Author get(Long authorId) {
-        return authorRepo.findById(authorId).orElse(null);
+    public Author get(Long id) {
+        return authorRepo.findById(id).orElse(null);
     }
 
     public Author save(Author author) {
         return authorRepo.save(author);
     }
 
-    public Author update(Author author, Long authorId) {
-        author.setId(authorId);
+    public Author update(Author author, Long id) {
+        author.setId(id);
         return authorRepo.save(author);
     }
 
-    public void delete(Long authorId) {
-        authorRepo.deleteById(authorId);
+    public void delete(Long id) {
+        authorRepo.deleteById(id);
     }
 }

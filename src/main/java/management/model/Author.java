@@ -17,11 +17,12 @@ public class Author {
     private String name;
     private String surname;
 
-    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER)
+
+    @OneToMany(mappedBy = "author", orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Book> books;
 
-    @OneToMany(mappedBy = "author", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "author", orphanRemoval = true, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<Review> reviews;
 

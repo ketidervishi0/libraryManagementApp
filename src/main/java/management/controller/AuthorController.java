@@ -1,12 +1,12 @@
 package management.controller;
 
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import management.mappers.RestResponseMapper;
 import management.model.Author;
 import management.request.AuthorRequest;
 import management.service.AuthorService;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -69,7 +69,7 @@ public class AuthorController {
     @PutMapping("/updateById/{id}")
     public ResponseEntity<Object> updateAuthorById(@PathVariable @NotNull Long id, @Valid @RequestBody AuthorRequest authorRequest) {
         try {
-            Author author = this.authorService.get(id);
+            Author author = authorService.get(id);
             if (author == null) {
                 return RestResponseMapper.map(SUCCESS, HttpStatus.NOT_FOUND, null, NOT_FOUND);
             }
@@ -90,7 +90,7 @@ public class AuthorController {
                 return RestResponseMapper.map(SUCCESS, HttpStatus.NOT_FOUND, null, NOT_FOUND);
             }
             authorService.delete(id);
-            return RestResponseMapper.map(SUCCESS, HttpStatus.OK, null, RECORD_DELETED);
+            return RestResponseMapper.map(SUCCESS, HttpStatus.OK, "The author with ID " + id + " has been deleted successfully.", RECORD_DELETED);
         } catch (Exception e) {
             return RestResponseMapper.map(FAIL, HttpStatus.INTERNAL_SERVER_ERROR, null, SERVER_ERROR);
 

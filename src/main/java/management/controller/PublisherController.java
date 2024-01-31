@@ -1,12 +1,11 @@
 package management.controller;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import management.mappers.RestResponseMapper;
-import management.model.Book;
 import management.model.Publisher;
 import management.request.PublisherRequest;
 import management.service.PublisherService;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static management.constants.Messages.*;
-import static management.constants.Messages.SERVER_ERROR;
 
 @RestController
 @RequestMapping(value = "/publisher")
@@ -31,7 +29,7 @@ public class PublisherController {
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity<Object> getAllPublisherss() {
+    public ResponseEntity<Object> getAllPublishers() {
         try {
             List<Publisher> publisherList = this.publisherService.findAll();
             if (publisherList.isEmpty()) {
@@ -76,7 +74,7 @@ public class PublisherController {
                 return RestResponseMapper.map(SUCCESS, HttpStatus.NOT_FOUND, null, NOT_FOUND);
             }
             publisherService.deletePublisher(id);
-            return RestResponseMapper.map(SUCCESS, HttpStatus.OK, null, RECORD_DELETED);
+            return RestResponseMapper.map(SUCCESS, HttpStatus.OK, "The publisher with ID " + id + " has been deleted successfully.", RECORD_DELETED);
         } catch (
                 Exception e) {
             return RestResponseMapper.map(FAIL, HttpStatus.INTERNAL_SERVER_ERROR, null, SERVER_ERROR);

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "review")
@@ -22,5 +24,6 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "author_id")
     @JsonBackReference
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Author author;
 }

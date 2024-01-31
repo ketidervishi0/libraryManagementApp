@@ -1,5 +1,7 @@
 package management.controller;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import management.mappers.RestResponseMapper;
 import management.model.Author;
 import management.model.Book;
@@ -8,8 +10,6 @@ import management.request.BookRequest;
 import management.service.AuthorService;
 import management.service.BookService;
 import management.service.PublisherService;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -116,7 +116,7 @@ public class BookController {
                 return RestResponseMapper.map(SUCCESS, HttpStatus.NOT_FOUND, null, NOT_FOUND);
             }
             bookService.delete(id);
-            return RestResponseMapper.map(SUCCESS, HttpStatus.OK, null, RECORD_DELETED);
+            return RestResponseMapper.map(SUCCESS, HttpStatus.OK, "The book with ID " + id + " has been deleted successfully.", RECORD_DELETED);
         } catch (Exception e) {
             return RestResponseMapper.map(FAIL, HttpStatus.INTERNAL_SERVER_ERROR, null, SERVER_ERROR);
 

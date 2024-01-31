@@ -1,6 +1,5 @@
 package management.service;
 
-import management.model.Book;
 import management.model.Publisher;
 import management.repo.PublisherRepo;
 import org.springframework.stereotype.Service;
